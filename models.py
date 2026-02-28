@@ -1,89 +1,86 @@
-from app import db
+import sqlite3
 
-class crop_details(db.Model):
-    crop = db.Column(db.String(200),primary_key=True)
-    n = db.Column(db.Float,nullable=False)
-    p = db.Column(db.Float, nullable=False)
-    k =db.Column(db.Float,nullable=False)
-    temperature = db.Column(db.Float,nullable=False)
-    humidity = db.Column(db.Float,nullable=False)
-    ph = db.Column(db.Float,nullable=False)
-    rainfall = db.Column(db.Float,nullable=False)
+# Create database connection
+conn = sqlite3.connect("agriculture.db")
+cursor = conn.cursor()
 
-class rain_info(db.Model):
-    state = db.Column(db.String(200),primary_key=True)
-    january = db.Column(db.Float,nullable=False)
-    february = db.Column(db.Float,nullable=False)
-    march = db.Column(db.Float,nullable=False)
-    april = db.Column(db.Float,nullable=False)
-    may = db.Column(db.Float,nullable=False)
-    june = db.Column(db.Float,nullable=False)
-    july = db.Column(db.Float,nullable=False)
-    august = db.Column(db.Float,nullable=False)
-    september = db.Column(db.Float,nullable=False)
-    october = db.Column(db.Float,nullable=False)
-    november = db.Column(db.Float,nullable=False)
-    december = db.Column(db.Float,nullable=False)
+# ================= TABLES =================
 
-class msp_details(db.Model):
-    crop = db.Column(db.String(200),primary_key=True)
-    year2010 = db.Column(db.Integer,nullable=False)
-    year2011 = db.Column(db.Integer, nullable=False)
-    year2012 = db.Column(db.Integer, nullable=False)
-    year2013 = db.Column(db.Integer, nullable=False)
-    year2014 = db.Column(db.Integer, nullable=False)
-    year2015 = db.Column(db.Integer, nullable=False)
-    year2016 = db.Column(db.Integer, nullable=False)
-    year2017 = db.Column(db.Integer, nullable=False)
-    year2018 = db.Column(db.Integer, nullable=False)
-    year2019 = db.Column(db.Integer, nullable=False)
-    year2020 = db.Column(db.Integer, nullable=False)
-    year2021 = db.Column(db.Integer, nullable=False)
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS crop_details (
+    crop TEXT PRIMARY KEY,
+    n REAL NOT NULL,
+    p REAL NOT NULL,
+    k REAL NOT NULL,
+    temperature REAL NOT NULL,
+    humidity REAL NOT NULL,
+    ph REAL NOT NULL,
+    rainfall REAL NOT NULL
+)
+""")
 
-class crop_name_info(db.Model):
-    recommendation_name =  db.Column(db.String(200),primary_key=True)
-    production_name = db.Column(db.String(200),nullable=False)
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS rain_info (
+    state TEXT PRIMARY KEY,
+    january REAL NOT NULL,
+    february REAL NOT NULL,
+    march REAL NOT NULL,
+    april REAL NOT NULL,
+    may REAL NOT NULL,
+    june REAL NOT NULL,
+    july REAL NOT NULL,
+    august REAL NOT NULL,
+    september REAL NOT NULL,
+    october REAL NOT NULL,
+    november REAL NOT NULL,
+    december REAL NOT NULL
+)
+""")
 
-class user(db.Model):
-    id = db.Column(db.Integer,primary_key=True,autoincrement=True)
-    username = db.Column(db.String(200),nullable=False)
-    email = db.Column(db.String(200),nullable=False)
-    hashed_password = db.Column(db.String(200),nullable=False)
-    api_token = db.Column(db.String(200),nullable=False)
-    auth_key = db.Column(db.String(200),nullable=False)
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS msp_details (
+    crop TEXT PRIMARY KEY,
+    year2010 INTEGER NOT NULL,
+    year2011 INTEGER NOT NULL,
+    year2012 INTEGER NOT NULL,
+    year2013 INTEGER NOT NULL,
+    year2014 INTEGER NOT NULL,
+    year2015 INTEGER NOT NULL,
+    year2016 INTEGER NOT NULL,
+    year2017 INTEGER NOT NULL,
+    year2018 INTEGER NOT NULL,
+    year2019 INTEGER NOT NULL,
+    year2020 INTEGER NOT NULL,
+    year2021 INTEGER NOT NULL
+)
+""")
 
-class kharif_yield(db.Model):
-    crop_name = db.Column(db.String(200),primary_key=True,nullable=False)
-    yield_value = db.Column(db.Float,nullable=False)
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS user (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    email TEXT NOT NULL,
+    hashed_password TEXT NOT NULL,
+    api_token TEXT NOT NULL,
+    auth_key TEXT NOT NULL
+)
+""")
 
-class rabi_yield(db.Model):
-    crop_name = db.Column(db.String(200),primary_key=True,nullable=False)
-    yield_value = db.Column(db.Float,nullable=False)
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS personal_model (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    api_token TEXT NOT NULL,
+    model_name TEXT NOT NULL,
+    recommendation_model TEXT NOT NULL,
+    labelencoder_model TEXT NOT NULL,
+    yield_model TEXT NOT NULL,
+    crops TEXT NOT NULL,
+    state TEXT NOT NULL,
+    city TEXT NOT NULL
+)
+""")
 
-class summer_yield(db.Model):
-    crop_name = db.Column(db.String(200),primary_key=True,nullable=False)
-    yield_value = db.Column(db.Float,nullable=False)
+conn.commit()
+conn.close()
 
-class winter_yield(db.Model):
-    crop_name = db.Column(db.String(200),primary_key=True,nullable=False)
-    yield_value = db.Column(db.Float,nullable=False)
-
-class autumn_yield(db.Model):
-    crop_name = db.Column(db.String(200),primary_key=True,nullable=False)
-    yield_value = db.Column(db.Float,nullable=False)
-
-class whole_year_yield(db.Model):
-    crop_name = db.Column(db.String(200),primary_key=True,nullable=False)
-    yield_value = db.Column(db.Float,nullable=False)
-
-class personal_model(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    api_token = db.Column(db.String(200),nullable=False)
-    model_name = db.Column(db.String(200),nullable=False)
-    recommendation_model = db.Column(db.String(200),nullable=False)
-    labelencoder_model = db.Column(db.String(200),nullable=False)
-    yield_model = db.Column(db.String(200),nullable=False)
-    crops = db.Column(db.String(1000),nullable=False)
-    state = db.Column(db.String(1000),nullable=False)
-    city = db.Column(db.String(1000),nullable=False)
-
+print("Database created successfully using pure Python.")
