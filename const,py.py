@@ -1,0 +1,31 @@
+from enum import IntEnum
+
+class HttpStatus(IntEnum):
+    OK = 200
+    CREATED = 201
+    NOT_FOUND = 404
+    BAD_REQUEST = 400
+
+
+# Example usage
+def check_status(status_code):
+    if status_code == HttpStatus.OK:
+        print("Request Successful")
+    elif status_code == HttpStatus.CREATED:
+        print("Resource Created Successfully")
+    elif status_code == HttpStatus.NOT_FOUND:
+        print("Resource Not Found")
+    elif status_code == HttpStatus.BAD_REQUEST:
+        print("Bad Request")
+    else:
+        print("Unknown Status Code")
+
+
+if __name__ == "__main__":
+    print("Status Code:", HttpStatus.OK)
+    print("Status Value:", HttpStatus.OK.value)
+    print("Status Name:", HttpStatus.OK.name)
+
+    # Test the function
+    check_status(HttpStatus.OK)
+    check_status(404)   # Works because IntEnum behaves like int
